@@ -1,40 +1,33 @@
 @font-face {
-  font-family: 'Nunito';
-  src: url("./fonts/nunito.woff2") format('woff2'),
-    url('./fonts/nunito.woff') format('woff');
+  font-family: 'Harmattan-Medium';
+  src: url("./fonts/HarmattanM.woff2") format('woff2'),
+    url('./fonts/HarmattanM.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Jigsaw';
+  src: url("./fonts/jigsaw.woff2") format('woff2'),
+    url('./fonts/jigsaw.woff') format('woff');
 }
 
 :root {
-  --fill1: #dedede75;
-  --fill2: #3a3a3a75;
+  --fill1: #dedede;
+  --fill2: #3a3a3a;
 
-  --inset1: #ffffff60;
-  --inset2: #00000060;
+  --text1: #000000;
+  --text2: #ffffff;
 
-  --insetalt1: #ffffff20;
-  --insetalt2: #00000020;
-
-  --text1: #000000dd;
-  --text2: #ffffffcc;
-
-  --hover1: #555555dd;
-
-  --shadow0: #00000030;
-  --shadow1: #00000040;
-  --shadow2: #00000050;
-  --shadow3: #00000070;
-
+  --hover1: #7b7b7b;
 }
 
 html {
   scroll-behavior: smooth;
-  transition: all 0.2s ease-in-out, height 0ms;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Harmattan-Medium', sans-serif;
   color: var(--text1);
   background-color: var(--fill2);
 }
@@ -48,8 +41,8 @@ a {
 
 /* ----- START NAVBAR ----- */
 header {
-  background: var(--fill1);
-  border-bottom: 2px solid var(--inset1);
+  /* background: var(--fill1); */
+  background: black;
   width: 100%;
   position: fixed;
   z-index: 2000;
@@ -60,14 +53,15 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 58px;
+  height: 68px;
 }
 
 .navtext {
   text-decoration: none;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  color: var(--text1);
+  /* color: var(--text1); */
+  color: white;
 }
 
 nav ul {
@@ -78,6 +72,7 @@ nav ul {
   display: flex;
   align-items: center;
   margin-left: 30px;
+  transition: all 0.5s ease-in-out, height 0ms;
 }
 
 .logotextresponsive {
@@ -91,11 +86,12 @@ nav ul {
   text-decoration: none;
   filter: invert(0%);
   fill-opacity: 50%;
+  transition: all 0.5s ease-in-out, height 0ms;
 }
 
 .menu {
   display: flex;
-  margin-right: 20px;
+  margin-right: 10px;
   transition: all 0.5s ease-in-out, height 0ms;
 }
 
@@ -106,7 +102,7 @@ nav ul {
 .menu li {
   position: relative;
   text-decoration: none;
-  margin-right: 30px;
+  margin-right: 80px;
   transition: all 0.2s ease-in-out, height 0ms;
 }
 
@@ -114,31 +110,6 @@ nav ul {
   text-decoration: underline;
   color: var(--hover1);
 }
-
-
-.darklight {
-  width: 50px;
-  height: auto;
-  position: fixed;
-  top: 90px;
-  right: 30px;
-  transition: all 0.2s ease-in-out, height 0ms;
-  z-index: 2;
-}
-
-
-.notif {
-  width: 40px;
-  height: auto;
-  position: fixed;
-  top: 160px;
-  right: 35px;
-  transition: all 0.2s ease-in-out, height 0ms;
-  z-index: 2;
-}
-
-
-
 
 
 /* END NAVBAR */
@@ -177,31 +148,23 @@ nav ul {
 
 
 
-/* Responsiveness to displays narrower than 950px */
+/* Responsiveness to displays narrower than 800px */
 
-@media screen and (max-width: 950px) {
+@media screen and (max-width: 800px) {
 
   .navtext {
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
 
   .logo {
-    margin-left: 10px;
+    margin-left: 0px;
   }
 
   .logo img {
     margin-right: 0px;
-    transform: scale(0.75);
+    transform: scale(0.85);
   }
   
-  .logotext {
-    font-size: 0;
-  }
-
-  .logotextresponsive {
-    font-size: 1rem;
-  }
-
   .menu {
     margin-right: 10px;
   }
