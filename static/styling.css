@@ -1,0 +1,213 @@
+@font-face {
+  font-family: 'Nunito';
+  src: url("./fonts/nunito.woff2") format('woff2'),
+    url('./fonts/nunito.woff') format('woff');
+}
+
+:root {
+  --fill1: #dedede75;
+  --fill2: #3a3a3a75;
+
+  --inset1: #ffffff60;
+  --inset2: #00000060;
+
+  --insetalt1: #ffffff20;
+  --insetalt2: #00000020;
+
+  --text1: #000000dd;
+  --text2: #ffffffcc;
+
+  --hover1: #555555dd;
+
+  --shadow0: #00000030;
+  --shadow1: #00000040;
+  --shadow2: #00000050;
+  --shadow3: #00000070;
+
+}
+
+html {
+  scroll-behavior: smooth;
+  transition: all 0.2s ease-in-out, height 0ms;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', sans-serif;
+  color: var(--text1);
+  background-color: var(--fill2);
+}
+
+
+a {
+  text-decoration: none;
+  color: var(--text1);
+}
+
+
+/* ----- START NAVBAR ----- */
+header {
+  background: var(--fill1);
+  border-bottom: 2px solid var(--inset1);
+  width: 100%;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 58px;
+}
+
+.navtext {
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--text1);
+}
+
+nav ul {
+  list-style-type: none;
+} 
+
+.logo {
+  display: flex;
+  align-items: center;
+  margin-left: 30px;
+}
+
+.logotextresponsive {
+  font-size: 1.2;
+}
+
+.logo img {
+  height: 50px;
+  margin-right: 10px;
+  margin-top: 5px;
+  text-decoration: none;
+  filter: invert(0%);
+  fill-opacity: 50%;
+}
+
+.menu {
+  display: flex;
+  margin-right: 20px;
+  transition: all 0.5s ease-in-out, height 0ms;
+}
+
+.menu ul {
+  list-style-type: none;
+}
+
+.menu li {
+  position: relative;
+  text-decoration: none;
+  margin-right: 30px;
+  transition: all 0.2s ease-in-out, height 0ms;
+}
+
+.menu a:hover {
+  text-decoration: underline;
+  color: var(--hover1);
+}
+
+
+.darklight {
+  width: 50px;
+  height: auto;
+  position: fixed;
+  top: 90px;
+  right: 30px;
+  transition: all 0.2s ease-in-out, height 0ms;
+  z-index: 2;
+}
+
+
+.notif {
+  width: 40px;
+  height: auto;
+  position: fixed;
+  top: 160px;
+  right: 35px;
+  transition: all 0.2s ease-in-out, height 0ms;
+  z-index: 2;
+}
+
+
+
+
+
+/* END NAVBAR */
+
+
+
+
+/* This section is to create extra spacing right above the subtitles
+  it will also get an ID in the HTML, so that links can automatically scroll to it */
+#top, #about, #outcomes {
+  height: 1px;
+}
+
+.section {
+  height: 0px;
+}
+
+
+.scrolltop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  height: 40px;
+  width: 40px;
+  transition: all 0.5s ease-in-out, height 0ms;
+}
+
+.scrolltop:hover {
+  transform: scale(1.2);
+}
+
+.end {
+  margin-bottom: 150px;
+}
+
+
+
+
+/* Responsiveness to displays narrower than 950px */
+
+@media screen and (max-width: 950px) {
+
+  .navtext {
+    font-size: 1rem;
+  }
+
+  .logo {
+    margin-left: 10px;
+  }
+
+  .logo img {
+    margin-right: 0px;
+    transform: scale(0.75);
+  }
+  
+  .logotext {
+    font-size: 0;
+  }
+
+  .logotextresponsive {
+    font-size: 1rem;
+  }
+
+  .menu {
+    margin-right: 10px;
+  }
+
+  .menu li {
+    margin-right: 10px;
+  }
+
+}
