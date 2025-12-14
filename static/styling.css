@@ -17,7 +17,7 @@
   --text1: #000000;
   --text2: #ffffff;
 
-  --hover1: #7b7b7b;
+  --hover1: #FE5D26;
 }
 
 html {
@@ -29,7 +29,7 @@ body {
   padding: 0;
   font-family: 'Harmattan-Medium', sans-serif;
   color: var(--text1);
-  background-color: var(--fill2);
+  background-color: #1a1a1a; 
 }
 
 
@@ -107,8 +107,12 @@ nav ul {
 }
 
 .menu a:hover {
-  text-decoration: underline;
   color: var(--hover1);
+}
+
+.menu a.active {
+  border-bottom: 2px solid #FE5D26;
+  padding-bottom: 0.1rem;
 }
 
 
@@ -119,7 +123,13 @@ nav ul {
 
 /* This section is to create extra spacing right above the subtitles
   it will also get an ID in the HTML, so that links can automatically scroll to it */
-#top, #about, #outcomes {
+#top {
+  height: 0px; 
+  margin: 0;
+  padding: 0;
+}
+
+#about, #outcomes {
   height: 1px;
 }
 
@@ -134,6 +144,7 @@ nav ul {
   right: 30px;
   height: 40px;
   width: 40px;
+  z-index: 100;  
   transition: all 0.5s ease-in-out, height 0ms;
 }
 
