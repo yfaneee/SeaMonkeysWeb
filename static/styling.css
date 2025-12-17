@@ -123,11 +123,6 @@ nav ul {
 
 /* This section is to create extra spacing right above the subtitles
   it will also get an ID in the HTML, so that links can automatically scroll to it */
-#top {
-  height: 0px; 
-  margin: 0;
-  padding: 0;
-}
 
 #about, #outcomes {
   height: 1px;
