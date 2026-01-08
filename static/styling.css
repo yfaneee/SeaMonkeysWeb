@@ -119,6 +119,188 @@ nav ul {
 /* END NAVBAR */
 
 
+/* ----- HERO SECTION ----- */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1400px;
+  padding: 40px 60px 60px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-text {
+  flex: 0 0 40%;
+  max-width: 40%;
+  padding-right: 40px;
+}
+
+.hero-text h1 {
+  font-family: 'Harmattan-Medium', sans-serif;
+  font-size: 4rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+  margin: 0 0 24px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 3px 5px 12px rgba(0, 0, 0, 0.7);
+}
+
+.hero-text h1 .highlight {
+  color: #e87c3e;
+  text-shadow: 0 0 20px rgba(232, 124, 62, 0.4);
+}
+
+.hero-description {
+  font-family: 'Harmattan-Medium', sans-serif;
+  font-size: 1.6rem;
+  color: rgba(255, 255, 255);
+  line-height: 1.6;
+  margin: 0 0 36px 0;
+  max-width: 380px;
+  text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.6);
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: 'Harmattan-Medium', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #e87c3e 0%, #d65a20 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 15px rgba(232, 124, 62, 0.4);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #f08a4e 0%, #e66a30 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232, 124, 62, 0.5);
+  color: #ffffff;
+}
+
+.btn-primary .arrow {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.btn-secondary {
+  color: #ffffff;
+  border: 2px solid #0071BC;
+  background: #0071BC;
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 113, 188, 0.15);
+  border-color: #0071BC;
+  transform: translateY(-2px);
+  color: #ffffff;
+  background: #0071BC;
+}
+
+.hero-model {
+  flex: 0 0 60%;
+  max-width: 60%;
+  height: 70vh;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-model canvas {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Hero Section Responsive */
+@media screen and (max-width: 1024px) {
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 120px 30px 60px 30px;
+  }
+
+  .hero-text {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-right: 0;
+    margin-bottom: 40px;
+  }
+
+  .hero-text h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-description {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .hero-model {
+    flex: 0 0 100%;
+    max-width: 100%;
+    height: 50vh;
+    min-height: 350px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 10px 22px;
+    font-size: 1rem;
+  }
+
+  .hero-model {
+    height: 40vh;
+    min-height: 280px;
+  }
+}
+
+/* END HERO SECTION */
+
+
 
 
 /* This section is to create extra spacing right above the subtitles

@@ -27,6 +27,11 @@ header, nav, .logo, .menu, a {
   z-index: 10;
 }
 
+.hero {
+  position: relative;
+  z-index: 5;
+}
+
 /* Scroll button needs to stay fixed positioned */
 .scrolltop {
   z-index: 100;
