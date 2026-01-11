@@ -934,6 +934,10 @@ nav ul {
   margin-bottom: 40px;
 }
 
+.scan-photo-grid.real-life-photos {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 .scan-photo {
   width: 100%;
   height: auto;
@@ -979,6 +983,10 @@ nav ul {
   .scan-photo-grid {
     grid-template-columns: 1fr;
     gap: 15px;
+  }
+  
+  .scan-photo-grid.real-life-photos {
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .scan-section-title {
