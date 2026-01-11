@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="static/styling.css">
+    <link rel="stylesheet" type="text/css" href="static/dither.css">
     <title>Research</title>
 </head>
 <body>
+    <!-- Dither Background Effect -->
+    <div id="dither-background"></div>
 
     <header>
         <nav>
@@ -32,7 +35,798 @@
         </nav>
     </header>
 
-    <h1>Research</h1>
+    <!-- Research List View -->
+    <main class="research-content" id="research-list-view">
+        <h1 class="research-title">RESEARCH</h1>
+        
+        <div class="research-list">
+            <hr class="research-divider">
+            <a href="#" class="research-item" data-doc="gaussian-splatt">GAUSSIAN SPLATT RESEARCH</a>
+            <hr class="research-divider">
+            <a href="#" class="research-item" data-doc="orbital-method">WHY ORBITAL METHOD</a>
+            <hr class="research-divider">
+            <a href="#" class="research-item" data-doc="guide-gaussian">GUIDE TO GAUSSIAN (Linux)</a>
+            <hr class="research-divider">
+            <a href="#" class="research-item" data-doc="photo-research">GAUSSIAN PHOTO RESEARCH</a>
+            <hr class="research-divider">
+            <a href="#" class="research-item" data-doc="obj-fbx-gltf">OBJ VS FBX VS GLTF</a>
+            <hr class="research-divider">
+            <a href="#" class="research-item" data-doc="easy-workflow">EASY GAUSSIAN WORKFLOW</a>
+        </div>
+
+        <h1 class="research-title">TESTING</h1>
+
+        <div class="research-list">
+            <hr class="research-divider">
+            <a href="#" class="research-item" data-doc="natural-led">NATURAL LIGHT VS LED LIGHT</a>
+            <hr class="research-divider">
+            <a href="#" class="research-item" data-doc="workflow-tests">DEFINING WORKFLOW + FIRST TESTS</a>
+            <hr class="research-divider">
+            <a href="#" class="research-item" data-doc="auditorium-scan">AUDITORIUM SCAN REPORT</a>
+        </div>
+    </main>
+
+    <!-- Documentation View -->
+    <main class="research-content documentation-view" id="documentation-view" style="display: none;">
+        <button class="back-button" id="back-button">
+            <img src="static/images/return.svg" alt="Back">
+        </button>
+        
+        <div class="documentation-content" id="documentation-content">
+            <!-- Content will be dynamically loaded here -->
+        </div>
+    </main>
+    
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal">
+        <span class="image-modal-close" id="modalClose">&times;</span>
+        <img class="image-modal-content" id="modalImage">
+        <div class="image-modal-caption" id="modalCaption"></div>
+    </div>
+    
+    <!-- Three.js library (global) for dither.js -->
+    <script src="https://unpkg.com/three@0.152.0/build/three.min.js"></script>
+    
+    <!-- Dither Effect Script -->
+    <script src="static/dither.js"></script>
+    
+    <!-- Research Documentation Toggle Script -->
+    <script>
+        const researchListView = document.getElementById('research-list-view');
+        const documentationView = document.getElementById('documentation-view');
+        const documentationContent = document.getElementById('documentation-content');
+        const backButton = document.getElementById('back-button');
+        const researchItems = document.querySelectorAll('.research-item');
+        
+        // Documentation content for each research item
+        const documentationData = {
+            'gaussian-splatt': {
+                title: 'GAUSSIAN SPLATT RESEARCH',
+                content: `
+                    <h2 class="doc-subtitle">From photos to point cloud</h2>
+                    <p class="doc-text">Start with photos 
+                                        <br>Go to structure-from-motion 
+                                        <br>COLMAP in our case 
+                                        <br>COLMAP guesses where the cameras were and constructs a sparse point cloud, which already kind of represents the scene. </p>
+                    
+                    <h2 class="doc-subtitle">1. What is Gaussian Splatting?</h2>
+                    <p class="doc-text">First what is a Gaussian</p>
+                    <p class="doc-text">We can visualise a Gaussian in 3D as a blob. 
+                                        <br>At first, I thought they were just points, but: </p>
+                    <p class="doc-text">In 1D, a Gaussian is a graph with a bump (a bell curve).
+                                   <br> In 3D, that bump translates to a blob that we can stretch, rotate, scale, etc.</p>
+                    <p class="doc-text">Each Gaussian blob has: </p>
+                    <p class="doc-text">- a position 
+                        <br>- a size / shape 
+                        <br>- an orientation 
+                        <br>- a color / appearance model </p>
+                    <p class="doc-text">Gaussian splatting represents the scene as a lot of these blobs instead of polygons or voxels.  </p>
+                    <h2 class="doc-subtitle">Why is this so good / better?</h2>
+                    <p class="doc-text">Works with reflections 
+                        <br>Much faster than NeRF</p>
+                    <p class="doc-text">NeRF = Neural Radiance Fields – a neural network model that reconstructs a 3D scene from a group of 2D pics
+                        <br> Gaussian splatting is still a radiance field, but without the heavy neural rendering that makes NeRF slower. </p>
+                    <p class="doc-text">Other important points: 
+                        <br>Gaussian splatting uses spherical harmonics 
+                        <br>Surfaces change color when viewed from different angles (glints, veneer, etc.) without needing a full neural network. 
+                        <br>Gaussian splatting gives you editing support (you can manipulate splats/points). 
+                        <br>All you need is to get the sparse point cloud from photogrammetry. </p>
+                    <p class="doc-text">Through iterative optimization, these Gaussians are adjusted to match the original images (using gradient descent):  
+                        <br>You have more Gaussians where you need detail (ex: trees with foliage)
+                        <br>And fewer Gaussians where detail is low (ex: sky) </p>    
+                    <h2 class="doc-subtitle">Basic workflow</h2>
+                    <p class="doc-text">1. Capture pics from different angles of the object / room / scene
+                        <br>2. Reconstruct cameras using a point cloud (COLMAP in my case) 
+                        <br>3. Create a 3D Gaussian “splat” centered at each point in the point cloud
+                        <br>4.Run an optimization process:
+                        <br>- position
+                        <br>- size
+                        <br>- orientation
+                        <br>- color/appearance</p>
+                    <p class="doc-text">Because you cannot have an even distribution of Gaussians that perfectly matches the complexity of reality, here comes: </p>
+                    <h2 class="doc-subtitle">Adaptive density control </h2>
+                    <p class="doc-text">More Gaussians where you need to model detail
+                        <br> - again: a tree with lots of leaves 
+                        <br>Fewer Gaussians for simple or flat areas 
+                        <br> - like a pathway or the sky</p>
+                    <h2 class="doc-subtitle">The difference between Photogrammetry, NeRF and Gaussian Splatting</h2>
+                    <h2 class="doc-subtitle">1. Photogrammetry: how it works</h2>
+                    <p class="doc-text">- Uses overlapping photos 
+                        <br>- Reconstructs a 3D mesh with textures
+                        <br>- The light and detail are baked into the texture
+                        <br>- Produces a polygon mesh 
+                        <br>Good for:
+                        <br>- real-world measurements 
+                        <br>- game-ready assets 
+                        <br>- accurate and editable results (if you have very good photos)</p>
+                    <h2 class="doc-subtitle">2. Neural Radiance Fields (NeRFs)</h2>
+                    <p class="doc-text">- Uses AI to learn a volumetric radiance field of the scene 
+                        <br>- Needs photos (not necessarily strongly overlapping) 
+                        <br>- Captures full scene context, including sky and horizon 
+                        <br>- Can generate smooth flythrough videos from viewpoints that were never actually photographed
+                        <br>Limitations:
+                        <br>- Doesn’t produce a mesh (it’s a volumetric field)
+                        <br>- Not accurate for measuring real sizes 
+                        <br>- Heavier and slower to train / render compared to Gaussian Splatting </p>
+                    <h2 class="doc-subtitle">3. Gaussian Splatting</h2>
+                    <p class="doc-text">- Transforms the trained radiance field into a point cloud of splats (elliptical blobs)
+                        <br>- Way faster than NeRF (and we’re not even talking about photogrammetry)
+                        <br>- Works in Unreal / Unity / Blender  
+                        <br>- Still volumetric-like, not a true mesh 
+                        <br>- Still not accurate for measurement 
+                        <br>- Harder to share than classic photogrammetry models (which are just meshes + textures) </p>
+                    <h2 class="doc-subtitle">Summary</h2>
+                    <h2 class="doc-subtitle">Photogrammetry result</h2>
+                    <p class="doc-text">Mesh + textures
+                        <br>Best for:
+                        <br>- real-world measurements 
+                        <br>- game-ready assets 
+                        <br>- accurate, editable, relatively light (if you have very good photos) </p>
+                    <h2 class="doc-subtitle">NeRF result</h2>
+                    <p class="doc-text">Volumetric radiance field 
+                        <br>Best for:
+                        <br>- virtual production 
+                        <br>- camera flythroughs 
+                        <br>- novel views 
+                        <br>- full-scene reconstructions
+                        <br>Not measurable, pretty heavy </p>
+                    <h2 class="doc-subtitle">Gaussian Splatting result</h2>
+                    <p class="doc-text">Real-time splat cloud 
+                        <br>Best for:
+                        <br>- real-time rendering in engines 
+                        <br>- fast, sharp, Unity/Unreal-friendly  
+                        <br>Not a mesh, not measurable  </p>
+
+                    <h2 class="doc-subtitle">Conclusion</h2>
+                    <p class="doc-text">Photogrammetry is excellent for accuracy and measurement. 
+                        <br>NeRFs and Gaussian Splatting provide highly immersive and flexible visual results, especially for view synthesis and real-time rendering, with Gaussian splatting bringing much higher speed than classic NeRF. </p>
+                    <h2 class="doc-subtitle">Reference </h2>
+                    <p class="doc-text"><a href="https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/3d_gaussian_splatting_high.pdf" target="_blank" rel="noopener noreferrer">https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/3d_gaussian_splatting_high.pdf</a></p>
+                `
+            },
+            'orbital-method': {
+                title: 'WHY ORBITAL METHOD',
+                content: `
+                    <h2 class="doc-subtitle">Why the orbit/wall following method worked (camera toward room centre)</h2>
+                    
+                    <h2 class="doc-subtitle">Summary</h2>
+                    <p class="doc-text">We captured the room with inward-facing orbits at two heights, followed by dedicated floor and ceiling passes. This delivered high overlap, strong parallax on walls/corners, and uniform coverage, resulting in stable alignment and a more complete mesh with fewer holes.</p>
+                    
+                    <h2 class="doc-subtitle">Method used</h2>
+                    <p class="doc-text">- Walked full perimeter twice (lower and upper height), camera aimed toward room centre.
+                        <br>- Maintained consistent distance, overlap, and lens settings.
+                        <br>- Added targeted floor and ceiling image sets.</p>
+                    
+                    <h2 class="doc-subtitle">1. High overlap + multiple view angles</h2>
+                    <p class="doc-text">According to best-practice guides, photogrammetry demands strong image overlap (both frontal and side) so that features can be matched reliably across images.</p>
+                    <p class="doc-text">Orbiting around the room ensures that each wall, floor and ceiling region appears in many photos with slightly different viewpoints. That improves feature correspondences and alignment robustness (reduces "non estimated cameras").</p>
+                    
+                    <h2 class="doc-subtitle">2. Convergent camera geometry and scene coverage</h2>
+                    <p class="doc-text">One paper states: "Convergent geometry requires multiple camera positions on a circular path around a building corner such that the camera optical axis at each camera position points to the object corner."</p>
+                    <p class="doc-text">In other words: by pointing the camera toward the room center (and following the walls), you create slightly inward angles, not strictly parallel to walls. That helps capture vertical surfaces (walls) better than if you pointed flat along the wall.</p>
+                    <p class="doc-text">This inward-facing orbit helps with depth estimation for walls (parallax) and ensures surfaces aren't captured only head-on but from many angles.</p>
+                    
+                    <h2 class="doc-subtitle">3. Systematic path and consistent height/lens parameters</h2>
+                    <p class="doc-text">According to a digital skills toolkit: "Walk around the object taking overlapping pictures… systematic capture of images ensuring adequate overlap … moving in a circular fashion around the object at different heights ensures good coverage."</p>
+                    <p class="doc-text">The method of two height levels + floor/ceiling shots matches this principle: multiple elevations give fuller coverage and avoid missing underside/ceiling details.</p>
+                    
+                    <h2 class="doc-subtitle">4. Reducing risk of missing areas or holes</h2>
+                    <p class="doc-text">Another source: "Without multiple images capturing duplicate points, most software algorithms struggle… so taking pictures at every possible angle is also key to successful scan."</p>
+                    <p class="doc-text">By walking complete circuits at each height and then capturing ceiling/floor, you minimise blind spots and ensure every surface is seen in multiple images, that decreases holes in your mesh.</p>
+                    
+                    <h2 class="doc-subtitle">Alternatives considered</h2>
+                    <p class="doc-text">Zigzag/ "painting": Covered planes but introduced viewpoint jumps and uneven overlap; alignment less reliable.</p>
+                    <p class="doc-text">Grid passes: Suited to aerial/open spaces, not enclosed rooms with close verticals (Pix4D guidance).</p>
+                    <p class="doc-text">Single-point 360°: Fast but lacked parallax for walls/corners; missed ceiling/floor detail.</p>
+                    
+                    <h2 class="doc-subtitle">Outcome</h2>
+                    <p class="doc-text">Orbit capture produced fewer non-estimated cameras, stronger alignment, and a denser, more complete mesh than zigzag in the same room.</p>
+                    <p class="doc-text">Coverage of walls, corners, floor, and ceiling was uniform across both height levels with minimal holes.</p>
+                    
+                    <h2 class="doc-subtitle">References</h2>
+                    <p class="doc-text"><a href="https://support.pix4d.com/hc/best-practices-for-image-acquisition-and-photogrammetry" target="_blank" rel="noopener noreferrer">https://support.pix4d.com/hc/best-practices-for-image-acquisition-and-photogrammetry</a></p>
+                    <p class="doc-text"><a href="https://isprs-archives.copernicus.org/articles/XLIII-B2-2022/29/2022/isprs-archives-XLIII-B2-2022-29-2022.pdf" target="_blank" rel="noopener noreferrer">https://isprs-archives.copernicus.org/articles/XLIII-B2-2022/29/2022/isprs-archives-XLIII-B2-2022-29-2022.pdf</a></p>
+                    <p class="doc-text"><a href="https://culturedigitalskills.github.io/2024-digitisation-3d-photogrammetry/instructor/photogrammetry-setup.html" target="_blank" rel="noopener noreferrer">https://culturedigitalskills.github.io/2024-digitisation-3d-photogrammetry/instructor/photogrammetry-setup.html</a></p>
+                    
+                    <h2 class="doc-subtitle">Visual Documentation</h2>
+                    <img src="static/documentation/orbitmethod1.png" alt="Orbital method visualization 1" class="doc-image">
+                    <img src="static/documentation/orbitmethod2.png" alt="Orbital method visualization 2" class="doc-image">
+                    <img src="static/documentation/orbitmethod3.png" alt="Orbital method visualization 3" class="doc-image">
+                `
+            },
+            'guide-gaussian': {
+                title: 'GUIDE TO GAUSSIAN (LINUX)',
+                content: `
+                    <h2 class="doc-subtitle">What this guide contains</h2>
+                    <p class="doc-text">- How to install everything from scratch
+                        <br>- How to start it once everything is set up
+                        <br>- How to run it on Nerfstudio + splatfacto
+                        <br>- How to run it on official 3DGS (not so harsh on hardware)</p>
+                    
+                    <h2 class="doc-subtitle">Hardware Requirements from the official repo</h2>
+                    <p class="doc-text">CUDA-ready GPU with Compute Capability 7.0+
+                        <br>24 GB VRAM (to train to paper evaluation quality)</p>
+                    <p class="doc-text">I did it on a Compute Capability of 6.1 with 8GB VRAM (GTX 1070)
+                        <br>THIS was run on Ubuntu Linux</p>
+                    
+                    <h2 class="doc-subtitle">Quick summary</h2>
+                    <p class="doc-text">- NVIDIA drivers
+                        <br>- CUDA 12.4
+                        <br>- Conda env
+                        <br>- PyTorch (CUDA 12.4)
+                        <br>- ffmpeg
+                        <br>- colmap
+                        <br>- Nerfstudio+splatfacto OR official 3DGS</p>
+                    
+                    <h2 class="doc-subtitle">1. NVIDIA DRIVERS</h2>
+                    <div class="doc-code">sudo apt update
+sudo apt install -y build-essential dkms linux-headers-\$(uname -r) \\
+  curl wget ca-certificates software-properties-common
+sudo ubuntu-drivers autoinstall
+
+sudo reboot</div>
+                    <p class="doc-text">To check everything is ok run:</p>
+                    <div class="doc-code">nvidia-smi</div>
+                    <p class="doc-text">Output in my case:</p>
+                    <div class="doc-code">...
+0    NVIDIA GeForce GTX 1070   ...</div>
+                    
+                    <h2 class="doc-subtitle">2. CUDA TOOLKIT</h2>
+                    <div class="doc-code">source /etc/os-release
+CUDA_REPO_PATH="ubuntu2404"
+
+wget -O /tmp/cuda-keyring.deb \\
+"https://developer.download.nvidia.com/compute/cuda/repos/\${CUDA_REPO_PATH}/x86_64/cuda-keyring_1.1-1_all.deb"
+sudo dpkg -i /tmp/cuda-keyring.deb
+sudo apt-get update
+
+# Install CUDA 12.4 toolkit
+sudo apt-get install -y cuda-toolkit-12-4
+
+# Verify nvcc
+/usr/local/cuda-12.5/bin/nvcc --version</div>
+                    
+                    <h2 class="doc-subtitle">2.1 ADD CUDA TO YOUR TOOLPATH</h2>
+                    <div class="doc-code">echo 'export PATH=/usr/local/cuda-12.5/bin:$PATH' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.5/lib64:\${LD_LIBRARY_PATH}' >> ~/.bashrc
+source ~/.bashrc
+
+nvcc --version   # should work globally now</div>
+                    
+                    <h2 class="doc-subtitle">3. INSTALL CONDA (MINIFORGE)</h2>
+                    <div class="doc-code">wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O /tmp/miniforge.sh
+bash /tmp/miniforge.sh -b -p $HOME/miniforge
+$HOME/miniforge/bin/conda init bash
+source ~/.bashrc</div>
+                    
+                    <h2 class="doc-subtitle">3.1 CREATE ENVIRONMENT FOR GSPLAT (GAUSSIAN SPLATTING)</h2>
+                    <div class="doc-code">conda create -y -n gsplat python=3.10
+conda activate gsplat</div>
+                    
+                    <h2 class="doc-subtitle">4. INSTALL PyTorch with CUDA</h2>
+                    <p class="doc-text">In the gsplat env:</p>
+                    <div class="doc-code">conda install -y -c pytorch -c nvidia pytorch torchvision pytorch-cuda=12.4
+
+# Quick test
+python -c "import torch; print('PyTorch:', torch.__version__); print('CUDA compiled:', torch.version.cuda); print('CUDA available:', torch.cuda.is_available()); print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'N/A')"</div>
+                    <p class="doc-text">It should print something like:</p>
+                    <div class="doc-code">PyTorch: 2.6.0+cu124
+CUDA compiled: 12.4
+CUDA available: True
+GPU: NVIDIA GeForce GTX 1070</div>
+                    <p class="doc-text">After this step you should choose between option A or B
+                        <br>In our case A means Nerfstudio + splatfacto (didn't work for me due to low hardware it kept crashing)
+                        <br>B: Official 3D Gaussian Splatting (GraphDECO repo)</p>
+                    
+                    <h2 class="doc-subtitle">5. OPTION A: NERFSTUDIO + SPLATFACTO</h2>
+                    <div class="doc-code"># Make sure build deps are available
+sudo apt install -y git cmake
+
+# In the conda env:
+pip install --upgrade pip
+
+# Install nerfstudio + gsplat backend
+pip install "nerfstudio>=1.0.0" "gsplat>=1.3.0"
+
+# Install nerfstudio CLI wrapper (downloads helpers)
+ns-install-cli
+
+# Verify CLI works
+ns-train --help</div>
+                    <p class="doc-text">Start with preparing the pictures in a folder, for my case:
+                        <br>"Home/IRONFILMS/ChurchCenter/JPG"</p>
+                    <div class="doc-code">conda activate gsplat
+ns-process-data images --data /home/fane/IRONFILMS/ChurchCenter/JPG --output-dir ./outputs/church_center</div>
+                    
+                    <p class="doc-text">Here probably you will run into the first problem:</p>
+                    <div class="doc-code">Could not find ffmpeg. Please install ffmpeg.
+See https://ffmpeg.org/download.html for installation instructions.</div>
+                    <p class="doc-text">FIX:</p>
+                    <div class="doc-code">sudo apt install -y ffmpeg</div>
+                    
+                    <p class="doc-text">Now probably you will run into the second problem:</p>
+                    <div class="doc-code">Could not find COLMAP. Please install COLMAP.
+See https://colmap.github.io/install.html for installation instructions.</div>
+                    <p class="doc-text">FIX:</p>
+                    <div class="doc-code">sudo apt install -y colmap
+# If that didn't work you can try:
+conda install -y -c conda-forge colmap</div>
+                    
+                    <p class="doc-text">Now you should be able to run again:</p>
+                    <div class="doc-code">ns-process-data images --data /home/fane/IRONFILMS/ChurchCenter/JPG --output-dir ./outputs/church_center</div>
+                    
+                    <p class="doc-text">Start training on your dataset (images):</p>
+                    <div class="doc-code">ns-train splatfacto --data ./outputs/church_center --max-num-iterations 30000</div>
+                    
+                    <p class="doc-text">First tried fix:</p>
+                    <div class="doc-code">export TORCH_COMPILE_DISABLE=1
+ns-train splatfacto --data ./outputs/church_center --max-num-iterations 30000</div>
+                    <p class="doc-text">Ended up with a black screen and a restart</p>
+                    
+                    <p class="doc-text">Second tried fix:</p>
+                    <div class="doc-code">export TORCH_COMPILE_DISABLE=1
+export TORCHDYNAMO_DISABLE=1
+ns-train splatfacto --data ./outputs/church_center --max-num-iterations 30000</div>
+                    
+                    <h2 class="doc-subtitle">6. OPTION B: Official Gaussian Splat repo GraphDECO</h2>
+                    <p class="doc-text">New terminal:</p>
+                    <div class="doc-code">conda activate gsplat
+cd ~
+git clone https://github.com/graphdeco-inria/gaussian-splatting.git
+cd gaussian-splatting
+
+pip install plyfile tqdm
+
+cd submodules/diff-gaussian-rasterization
+mkdir -p build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make -j\$(nproc)</div>
+                    
+                    <p class="doc-text">Error because missing &lt;cstdint&gt;
+                        <br>This file needs modification: submodules/diff-gaussian-rasterization/cuda_rasterizer/rasterizer_impl.h</p>
+                    <div class="doc-code">#pragma once
+
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;cstdint&gt;     // &lt;-- this is the key one
+#include "rasterizer.h"
+#include &lt;cuda_runtime_api.h&gt;</div>
+                    
+                    <p class="doc-text">Rebuild and it should work:</p>
+                    <div class="doc-code">cd ~/gaussian-splatting/submodules/diff-gaussian-rasterization/build
+make -j\$(nproc)</div>
+                    
+                    <p class="doc-text">Training:</p>
+                    <div class="doc-code">cd ~/gaussian-splatting
+export PYTHONPATH="\${PYTHONPATH}:\$(pwd)/submodules/diff-gaussian-rasterization:\$(pwd)/submodules/simple-knn"
+python train.py -s ~/outputs/church_center/colmap -m ~/outputs/church_center/3dgs_model</div>
+                    
+                    <p class="doc-text">Possible problem:</p>
+                    <div class="doc-code">ModuleNotFoundError: No module named 'simple_knn'</div>
+                    
+                    <h2 class="doc-subtitle">6.1. Build the simple_knn extension</h2>
+                    <div class="doc-code">conda activate gsplat
+cd ~/gaussian-splatting/submodules/simple-knn
+python setup.py build_ext --inplace</div>
+                    
+                    <h2 class="doc-subtitle">6.2. Make Python see the submodules (PYTHONPATH)</h2>
+                    <div class="doc-code">cd ~/gaussian-splatting
+export PYTHONPATH="\${PYTHONPATH}:\$(pwd)/submodules/diff-gaussian-rasterization:\$(pwd)/submodules/simple-knn"</div>
+                    
+                    <h2 class="doc-subtitle">6.3. Run the training command</h2>
+                    <div class="doc-code">cd ~/gaussian-splatting
+export PYTHONPATH="\${PYTHONPATH}:\$(pwd)/submodules/diff-gaussian-rasterization:\$(pwd)/submodules/simple-knn"
+python train.py -s ~/outputs/church_center/colmap -m ~/outputs/church_center/3dgs_model</div>
+                    
+                    <h2 class="doc-subtitle">7. HOW TO WORK WITH A NEW SET</h2>
+                    
+                    <h2 class="doc-subtitle">7.1. Prepare your new dataset folder</h2>
+                    <div class="doc-code">cd ~
+mkdir -p new_scene/input
+
+# Example: if your photos are in ~/Pictures/new_photos/
+cp ~/Pictures/new_photos/*.JPG ~/new_scene/input/
+# or whatever path your photos are at</div>
+                    
+                    <h2 class="doc-subtitle">7.2. Run the official converter</h2>
+                    <div class="doc-code">cd ~/gaussian-splatting
+
+python convert.py -s ~/new_scene --colmap_executable /home/fane/miniforge/envs/gsplat/bin/colmap</div>
+                    
+                    <h2 class="doc-subtitle">7.3. Train 3DGS</h2>
+                    <div class="doc-code">cd ~/gaussian-splatting
+export PYTHONPATH="\${PYTHONPATH}:\$(pwd)/submodules/diff-gaussian-rasterization:\$(pwd)/submodules/simple-knn"
+
+python train.py -s ~/new_scene -m ~/new_scene/3dgs_model</div>
+                    
+                    <h2 class="doc-subtitle">7.4. Render views</h2>
+                    <div class="doc-code">python render.py -m ~/new_scene/3dgs_model</div>
+                    
+                    <h2 class="doc-subtitle">What folders to keep</h2>
+                    <p class="doc-text">- 3dgs_model
+                        <br>- images
+                        <br>- sparse</p>
+                `
+            },
+            'photo-research': {
+                title: 'GAUSSIAN PHOTO RESEARCH',
+                content: `
+                    <h2 class="doc-subtitle">1. Core principles for Gaussian splats</h2>
+                    <p class="doc-text">Across different guides and tools, the same 3 rules keep coming back:</p>
+                    
+                    <h2 class="doc-subtitle">Consistency</h2>
+                    <p class="doc-text">- Fixed focal length.
+                        <br>- Lock exposure, ISO and white balance.
+                        <br>- Avoid auto focus hunting; ideally use manual focus once and keep it.</p>
+                    
+                    <h2 class="doc-subtitle">Clarity</h2>
+                    <p class="doc-text">- No motion blur: use fast shutter (e.g. 1/250+ on handheld stills, higher for video).
+                        <br>- Depth of field (f/5.6–f/11 on crop/FF, or "everything in focus" on phone).
+                        <br>- No rolling-shutter wobble from whipping the camera around.</p>
+                    
+                    <h2 class="doc-subtitle">Coverage & parallax</h2>
+                    <p class="doc-text">- Move the camera through space, don't just rotate in place.
+                        <br>- Loads of overlapping views from different positions and heights.
+                        <br>- Include some background/room context, not just the object.</p>
+                    
+                    <h2 class="doc-subtitle">2. Camera settings (DSLR / mirrorless / phone)</h2>
+                    <p class="doc-text">Based on Reflct's 3DGS capture tips, SmartDataScan's gsplat tutorial, and Volinga's field guide:</p>
+                    
+                    <h2 class="doc-subtitle">Mode</h2>
+                    <p class="doc-text">- Shoot stills if you want best quality (less motion blur, more control).
+                        <br>- Use video + frame extraction if you want speed or are walking a long street. Record at 60 fps if possible and later extract 1 sharp frame every ~0.5 s</p>
+                    
+                    <h2 class="doc-subtitle">Manual settings (ideal)</h2>
+                    <p class="doc-text">Focal length: moderately wide (full-frame equiv. ~24–35 mm). Avoid extreme wide.</p>
+                    <p class="doc-text">Aperture: keep the scene sharp:</p>
+                    <p class="doc-text">- APS-C / FF: around f/5.6–f/11.</p>
+                    <p class="doc-text">Shutter: as fast as light allows:</p>
+                    <p class="doc-text">- Handheld stills: ≥1/250 s (slower only if you use a tripod).
+                        <br>- Video: shutter ~2× frame rate (1/120 s for 60 fps) to avoid smear.</p>
+                    <p class="doc-text">ISO: pick a fixed value (ex: 100–800); NO auto ISO.</p>
+                    <p class="doc-text">White balance: lock WB (ex: daylight / cloudy / 4500 K), never auto.</p>
+                    <p class="doc-text">Focus:</p>
+                    <p class="doc-text">- Prefer manual focus: pre-focus on your subject and leave it.
+                        <br>- If you must use AF, turn off continuous refocus and refocus only occasionally.</p>
+                    
+                    <h2 class="doc-subtitle">Phone-specific hacks</h2>
+                    <p class="doc-text">If using a smartphone:</p>
+                    <p class="doc-text">- Turn off "night mode," HDR bursts or any fancy multi-frame modes if they cause ghosts.
+                        <br>- Lock exposure and WB if the camera app allows.
+                        <br>- Move very smooth and slow because phones add rolling-shutter wobble.</p>
+                    
+                    <h2 class="doc-subtitle">3. How much overlap & how many images?</h2>
+                    <p class="doc-text">Different sources give slightly different numbers:</p>
+                    <p class="doc-text">- SmartDataScan: 20–30% overlap minimum between adjacent shots.
+                        <br>- Reflct (for stills): recommends 70–80% overlap for robust parallax.</p>
+                    
+                    <p class="doc-text">You can think of it like this:</p>
+                    <p class="doc-text">- Video: you automatically get tons of overlap, so just move steadily.
+                        <br>- Stills: aim for something in the 50–80% overlap range; it's practically "small steps, lots of redundancy".</p>
+                    
+                    <p class="doc-text">Typical image counts from real 3DGS capture guides:</p>
+                    <p class="doc-text">- Small object: approx. 100–200 images.
+                        <br>- Small room: approx. 150–300 images, depending on clutter.
+                        <br>- Larger street corner / façade: often 150–400 images.</p>
+                    
+                    <p class="doc-text">More is not always better! Thousands of near-identical frames can hurt (overfitting, longer training). Reflct warns about >80% overlap and redundant views.</p>
+                    
+                    <h2 class="doc-subtitle">4. Movement patterns (this is where it differs from "single orbit" photogrammetry)</h2>
+                    <p class="doc-text">From Volinga and Reflct: you must translate, and you must create parallax.</p>
+                    <p class="doc-text">Don't stand in one spot and just pan.</p>
+                    <p class="doc-text">Move the camera through space:</p>
+                    <p class="doc-text">- Walk paths.
+                        <br>- Change height.
+                        <br>- Mix near and far distances.</p>
+                    
+                    <img src="static/documentation/gaussianphoto.png" alt="Movement pattern visualization" class="doc-image">
+                    
+                    <p class="doc-text">Think in layers instead of a single orbit:</p>
+                    <p class="doc-text">- One circle rotation closer, one mid, one further away.
+                        <br>- Some shots from above, some from lower angles.
+                        <br>- Some tangential/oblique views of edges and corners.</p>
+                    
+                    <h2 class="doc-subtitle">5. Concrete recipes for our use-cases</h2>
+                    
+                    <h2 class="doc-subtitle">A. Street corner (about 100–300 images)</h2>
+                    <p class="doc-text">Use a walkthrough pattern rather than just circling one object.</p>
+                    
+                    <p class="doc-text">Plan the area:</p>
+                    <p class="doc-text">- Decide what must be perfect (ex: building facade) vs. just context.
+                        <br>- Avoid rush hour / heavy pedestrian traffic, if possible, the scope is obtaining a static scene.</p>
+                    
+                    <p class="doc-text">Main pass: building side A</p>
+                    <p class="doc-text">- Start 5–10 m away from the building, camera at eye-level.
+                        <br>- Walk parallel to the facade, taking a shot every around 0.5–1 m (or record video).
+                        <br>- Slightly angle the camera toward the building so it's always in frame.</p>
+                    
+                    <p class="doc-text">Second pass: opposite side / diagonals</p>
+                    <p class="doc-text">- Cross the street (if safe) and repeat, so you have a second viewpoint band.
+                        <br>- Add a third pass where you walk diagonally across the corner, to give strong parallax on the corner edges.</p>
+                    
+                    <p class="doc-text">Height variation:</p>
+                    <p class="doc-text">- Do another lap while holding the camera higher above your head, and one with the camera slightly lower (chest/stomach level).
+                        <br>- Tilt up/down a bit to cover windows, roofline, and ground.</p>
+                    
+                    <p class="doc-text">Detail passes:</p>
+                    <p class="doc-text">- Move closer to important features (doorway, statue) and do a tight mini orbit around them while keeping some background visible for COLMAP.</p>
+                    
+                    <p class="doc-text">IMPORTANT:</p>
+                    <p class="doc-text">- Avoid cars/people moving through the frame; if someone walks through, just skip that frame when you build your dataset.
+                        <br>- Try not to have big glass surfaces dominating every frame</p>
+                    
+                    <h2 class="doc-subtitle">B. Small room (about 160+ images)</h2>
+                    <p class="doc-text">Combining a three-row eye-level strategy with Reflct's room recipe:</p>
+                    
+                    <p class="doc-text">Perimeter passes:</p>
+                    <p class="doc-text">2–3 loops around the room close to the walls:</p>
+                    <p class="doc-text">- Loop 1: camera at chest height, lens facing the wall, distance something around 1–2 m.
+                        <br>- Loop 2: camera higher (eye / above head), angled slightly down.
+                        <br>- Optional Loop 3: camera lower, angled slightly up.
+                        <br>- Take a shot every 0.5–1 m along the wall.</p>
+                    
+                    <p class="doc-text">Center passes:</p>
+                    <p class="doc-text">- Stand near the middle, then walk small arcs while looking toward each wall.
+                        <br>- Mix distances: some shots closer to furniture, some more centered.
+                        <br>- This gives cross-room parallax, not just "wall-hugging" shots.</p>
+                    
+                    <p class="doc-text">Floor and ceiling:</p>
+                    <p class="doc-text">- For floor: hold the camera high, point it down 30–60°, and walk a grid.
+                        <br>- For ceiling: hold it lower, point up, and repeat a grid-like walk.
+                        <br>- There is no need for crazy density, but there must be enough shots, so the model sees from above/below, not only horizontally.</p>
+                    
+                    <p class="doc-text">Deal with white / plain walls:</p>
+                    <p class="doc-text">Textureless walls are hard for COLMAP and Gaussian splats (they mention this explicitly).</p>
+                    <p class="doc-text">- Add subtle texture: posters, painter's tape markers, or let some furniture overlap into the wall shots.
+                        <br>- 160 images are totally reasonable for a modest room with this pattern.</p>
+                    
+                    <h2 class="doc-subtitle">6. Lighting</h2>
+                    <p class="doc-text">All the serious guides say the same thing: even, soft and boring light is the best.</p>
+                    <p class="doc-text">- Cloudy daylight, shade, or diffused artificial light.</p>
+                    
+                    <p class="doc-text">Avoid:</p>
+                    <p class="doc-text">- Strong directional sunlight.
+                        <br>- Moving shadows (people, trees, traffic).
+                        <br>- Flickering neon / LED patterns.</p>
+                    
+                    <p class="doc-text">Indoors: Avoid tiny bright windows + dark corners (huge dynamic range). Either add fill light or choose a time of day with more balanced light.</p>
+                    
+                    <h2 class="doc-subtitle">7. Differences vs the classic photogrammetry "orbit"</h2>
+                    
+                    <p class="doc-text">Don't stop at one orbit:</p>
+                    <p class="doc-text">- Do multiple rings at different heights and distances instead of one perfect circle.</p>
+                    
+                    <p class="doc-text">Think "environment," not just "object":</p>
+                    <p class="doc-text">- 3DGS shines when you include surroundings: floors, ceilings, background buildings, etc.</p>
+                    
+                    <p class="doc-text">Be stricter with consistency:</p>
+                    <p class="doc-text">- For Gaussian splats, inconsistency with auto exposure/WB often shows up as weird color/noise artifacts in the final scene.</p>
+                    
+                    <h2 class="doc-subtitle">8. References</h2>
+                    <p class="doc-text"><a href="https://web.volinga.ai/capturing-gaussian-splats-blog/" target="_blank" rel="noopener noreferrer">https://web.volinga.ai/capturing-gaussian-splats-blog/</a></p>
+                    <p class="doc-text"><a href="https://smartdatascan.com/tutorials/gaussian-splatting-windows/capturing/" target="_blank" rel="noopener noreferrer">https://smartdatascan.com/tutorials/gaussian-splatting-windows/capturing/</a></p>
+                    <p class="doc-text"><a href="https://docs.reflct.app/capturing_gaussian_splats" target="_blank" rel="noopener noreferrer">https://docs.reflct.app/capturing_gaussian_splats</a></p>
+                    <p class="doc-text"><a href="https://medium.com/@heyulei/capture-images-for-gaussian-splatting-81d081bbc826" target="_blank" rel="noopener noreferrer">https://medium.com/@heyulei/capture-images-for-gaussian-splatting-81d081bbc826</a></p>
+                    <p class="doc-text"><a href="https://www.creativeailab.be/beginners-guide-to-gaussian-splatting/" target="_blank" rel="noopener noreferrer">https://www.creativeailab.be/beginners-guide-to-gaussian-splatting/</a></p>
+                `
+            },
+            'natural-led': {
+                title: 'NATURAL LIGHT VS LED LIGHT',
+                content: `
+                    <h2 class="doc-subtitle">Test 10/11 — Indoor room scan (controlled artificial light)</h2>
+                    
+                    <h2 class="doc-subtitle">Capture</h2>
+                    <p class="doc-text">- Two inward-facing perimeter orbits: ~1.2 m (waist) and ~1.7 m (eye), ~70–80% overlap; extra shots at corners.
+                        <br>- Center rotations for ceiling and floor (~10–15 images each), angled up then down; crouched for floor variation.
+                        <br>- Tripod, slow perimeter moves; camera ~10–15° toward room centre.</p>
+                    
+                    <h2 class="doc-subtitle">Camera</h2>
+                    <p class="doc-text">f/5.6, 1/60, ISO 200, WB Auto.</p>
+                    
+                    <h2 class="doc-subtitle">Markers</h2>
+                    <p class="doc-text">- Full A4, bold "X".
+                        <br>- ~1.5–2 m spacing on each wall; markers near corners/90° joints.
+                        <br>- Several on floor (taped) and near ceiling; evenly distributed; no duplicates (rotated/labeled).</p>
+                    
+                    <div class="doc-image-row">
+                        <img src="static/documentation/natlight1.jpg" alt="Test 10 markers view 1">
+                        <img src="static/documentation/natlight2.jpg" alt="Test 10 markers view 2">
+                    </div>
+                    
+                    <img src="static/documentation/natlight3.jpg" alt="Test 10 room overview" class="doc-image">
+                    
+                    <h2 class="doc-subtitle">Meshroom (2025.1.0)</h2>
+                    <p class="doc-text">- FeatureExtraction: Quality High, Density High, Type SIFT only
+                        <br>- DepthMap: Downscale 2, Max Nb Neighbour Cameras 10
+                        <br>- DepthMapFilter: Min Consistent Cameras 4, Bad Similarity 8
+                        <br>- Meshing: Max Input Points 18,000,000; Max Points 3,000,000; Weakly Supported Surface Off
+                        <br>- MeshFiltering: Keep Only the Largest Mesh ON
+                        <br>- Texturing: TextureSize 8192; Texture Downscale 2</p>
+                    
+                    <h2 class="doc-subtitle">Results</h2>
+                    <p class="doc-text">Pros: Floor nearly production-ready; walls sharp and aligned; minimal holes; markers improved structural stability; tripod workflow yielded consistent overlap and clean wall definition.</p>
+                    <p class="doc-text">Cons/Next: Textures slightly dark (ISO 200, artificial light); white walls show mild noise/softness. Plan to test ISO 400–800, controlled natural-light variant, and higher meshing for finer detail.</p>
+                    
+                    <img src="static/documentation/natlight4.png" alt="Test 10 result overview" class="doc-image">
+                    
+                    <div class="doc-image-grid">
+                        <img src="static/documentation/natlight5.png" alt="Test 10 result detail 1">
+                        <img src="static/documentation/natlight6.png" alt="Test 10 result detail 2">
+                        <img src="static/documentation/natlight7.png" alt="Test 10 result detail 3">
+                        <img src="static/documentation/natlight8.png" alt="Test 10 result detail 4">
+                    </div>
+                    
+                    <h2 class="doc-subtitle">Test 11/11 — Indoor room scan (higher ISO + daylight WB + ultra settings)</h2>
+                    
+                    <h2 class="doc-subtitle">Camera</h2>
+                    <p class="doc-text">f/5.6, 1/60, ISO 400, WB Daylight.</p>
+                    
+                    <h2 class="doc-subtitle">Room/Markers</h2>
+                    <p class="doc-text">- Same room; printed markers on walls (≈4 per wall); X/circle combos at corners and wall–floor intersections for large uniform areas.</p>
+                    
+                    <h2 class="doc-subtitle">Capture</h2>
+                    <p class="doc-text">- Same orbital method, two heights (~1.20 m, ~1.70 m), plus floor/ceiling passes with overlap.</p>
+                    
+                    <div class="doc-image-row">
+                        <img src="static/documentation/natlight9.jpg" alt="Test 11 capture view 1">
+                        <img src="static/documentation/natlight10.jpg" alt="Test 11 capture view 2">
+                    </div>
+                    
+                    <h2 class="doc-subtitle">Processing</h2>
+                    <p class="doc-text">- University workstation; higher computational budget; intent: test denser reconstruction.</p>
+                    
+                    <h2 class="doc-subtitle">Meshroom</h2>
+                    <p class="doc-text">- FeatureExtraction: Quality Ultra, Describer SIFT only, Density Ultra
+                        <br>- DepthMap: Downscale 1, Max Nb Neighbour Cameras 14
+                        <br>- DepthMapFilter: Min Consistent Cameras 3; Bad Similarity 6
+                        <br>- Meshing: Max Input Points 25,000,000; Max Points 5,500,000; Weakly Supported Surface Off
+                        <br>- MeshFiltering: Keep Only the Largest Mesh ON
+                        <br>- Texturing: Texture Size 8192</p>
+                    
+                    <h2 class="doc-subtitle">Results</h2>
+                    <p class="doc-text">- Visual quality worse than Test 10/11: noisier, slight green cast, flatter textures, less distinct surfaces despite higher settings.
+                        <br>- Likely causes: higher ISO noise; mixed/uneven lighting; WB mismatch leading to inconsistent color and reduced contrast. Feature detection suffered; depth data noisier.</p>
+                    
+                    <div class="doc-image-grid">
+                        <img src="static/documentation/natlight11.png" alt="Test 11 result view 1">
+                        <img src="static/documentation/natlight12.png" alt="Test 11 result view 2">
+                        <img src="static/documentation/natlight13.png" alt="Test 11 result view 3">
+                        <img src="static/documentation/natlight14.png" alt="Test 11 result view 4">
+                    </div>
+                    
+                    <h2 class="doc-subtitle">Conclusion across tests</h2>
+                    <p class="doc-text">- Clean, consistent input images dominated outcomes. Low ISO, controlled lighting, and stable WB produced the best geometry and textures.
+                        <br>- Raising Meshroom quality improved results only when input images were already clean; with noisy/mixed lighting, higher settings amplified issues.
+                        <br>- The inward-facing two-height orbit plus center ceiling/floor passes remained robust across both tests; markers materially improved alignment on uniform walls.</p>
+                    
+                    <h2 class="doc-subtitle">Next steps</h2>
+                    <p class="doc-text">- Lock a single light type and WB; avoid mixed/daylight spill.
+                        <br>- Keep ISO 100–200; match exposure across all images.
+                        <br>- Retest with same capture path and markers; then increase meshing/neighbor parameters once inputs are clean.
+                        <br>- Produce side-by-side outputs (Test 10/11 vs 11/11) to illustrate lighting/ISO impact for the report.</p>
+                `
+            },
+            // Add more documentation entries as needed
+        };
+        
+        // Handle research item clicks
+        researchItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const docId = item.getAttribute('data-doc');
+                
+                if (documentationData[docId]) {
+                    // Load documentation content
+                    documentationContent.innerHTML = `
+                        <h1 class="doc-title">${documentationData[docId].title}</h1>
+                        ${documentationData[docId].content}
+                    `;
+                    
+                    // Switch views
+                    researchListView.style.display = 'none';
+                    documentationView.style.display = 'block';
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                } else {
+                    // Placeholder for documents without content yet
+                    documentationContent.innerHTML = `
+                        <h1 class="doc-title">${item.textContent}</h1>
+                        <p class="doc-text">Documentation content coming soon...</p>
+                    `;
+                    
+                    researchListView.style.display = 'none';
+                    documentationView.style.display = 'block';
+                    window.scrollTo(0, 0);
+                }
+            });
+        });
+        
+        // Handle back button click
+        backButton.addEventListener('click', () => {
+            documentationView.style.display = 'none';
+            researchListView.style.display = 'block';
+            window.scrollTo(0, 0);
+        });
+        
+        // Image Modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('modalCaption');
+        const closeModal = document.getElementById('modalClose');
+        
+        // Function to setup image click handlers
+        function setupImageModal() {
+            // Select all images in documentation content
+            const images = documentationContent.querySelectorAll('.doc-image, .doc-image-row img, .doc-image-grid img');
+            
+            images.forEach(img => {
+                img.addEventListener('click', function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.src;
+                    modalCaption.textContent = this.alt || '';
+                    // Prevent body scroll when modal is open
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+        }
+        
+        // Close modal when clicking the X
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close modal when clicking outside the image
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Setup image modal after content is loaded
+        researchItems.forEach(item => {
+            const originalClickHandler = item.onclick;
+            item.addEventListener('click', (e) => {
+                // Wait a bit for content to load, then setup modal
+                setTimeout(setupImageModal, 100);
+            });
+        });
+    </script>
+    
+    <a href="#top">
+        <img class="scrolltop" src="static/images/scrollup.png" alt="Scroll up button">
+    </a>
     
 </body>
 </html>

@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="static/styling.css">
+    <link rel="stylesheet" type="text/css" href="static/dither.css">
     <title>Scans</title>
 </head>
 <body>
+    <!-- Dither Background Effect -->
+    <div id="dither-background"></div>
+
     <header>
         <nav>
             <div class="logo">
@@ -31,6 +35,149 @@
         </nav>
     </header>
 
-    <h1>Scans</h1>
+    <main class="scans-content">
+        <h1 class="scans-title">SCANS</h1>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">ALL.</button>
+            <button class="filter-btn" data-filter="gaussian">Gaussian</button>
+            <button class="filter-btn" data-filter="mesh">Mesh.</button>
+        </div>
+        
+        <div class="gallery-grid">
+            <!-- Card 1 -->
+            <div class="gallery-card" data-category="gaussian">
+                <div class="card-image">
+                    <img src="static/scans/CornerGsplat.png" alt="Achteroom Corner">
+                </div>
+                <div class="card-overlay">
+                    <h3 class="card-title">ACHTEROOM CORNER GAUSSIAN SPLAT</h3>
+                    <p class="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ullamcorper incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <div class="card-actions">
+                        <a href="#" class="action-icon view-icon" title="View">
+                            <img src="static/images/view.svg" alt="View">
+                        </a>
+                        <a href="#" class="action-icon download-icon" title="Download">
+                            <img src="static/images/download.svg" alt="Download">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="gallery-card" data-category="gaussian">
+                <div class="card-image">
+                    <img src="static/scans/ChurchGsplat.png" alt="Church gsplat">
+                </div>
+                <div class="card-overlay">
+                    <h3 class="card-title">EINDHOVEN CENTER CHURCH GAUSSIAN SPLAT</h3>
+                    <p class="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ullamcorper incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <div class="card-actions">
+                        <a href="#" class="action-icon view-icon" title="View">
+                            <img src="static/images/view.svg" alt="View">
+                        </a>
+                        <a href="#" class="action-icon download-icon" title="Download">
+                            <img src="static/images/download.svg" alt="Download">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 3 -->
+            <div class="gallery-card" data-category="mesh">
+                <div class="card-image">
+                    <img src="static/scans/CornerV2b.png" alt="Achteroom Corner mesh">
+                </div>
+                <div class="card-overlay">
+                    <h3 class="card-title">ACHTEROOM CORNER MESH</h3>
+                    <p class="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ullamcorper incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <div class="card-actions">
+                        <a href="#" class="action-icon view-icon" title="View">
+                            <img src="static/images/view.svg" alt="View">
+                        </a>
+                        <a href="#" class="action-icon download-icon" title="Download">
+                            <img src="static/images/download.svg" alt="Download">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Card 4 -->
+             <div class="gallery-card" data-category="mesh">
+                <div class="card-image">
+                    <img src="static/scans/ChurchRenderC.png" alt="church mesh">
+                </div>
+                <div class="card-overlay">
+                    <h3 class="card-title">EINDHOVEN CENTER CHURCH MESH</h3>
+                    <p class="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ullamcorper incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <div class="card-actions">
+                        <a href="#" class="action-icon view-icon" title="View">
+                            <img src="static/images/view.svg" alt="View">
+                        </a>
+                        <a href="#" class="action-icon download-icon" title="Download">
+                            <img src="static/images/download.svg" alt="Download">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Card 5 -->
+             <div class="gallery-card" data-category="mesh">
+                <div class="card-image">
+                    <img src="static/scans/EffenaarA.png" alt="effenaar mesh">
+                </div>
+                <div class="card-overlay">
+                    <h3 class="card-title">EFFENAAR MESH</h3>
+                    <p class="card-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ullamcorper incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <div class="card-actions">
+                        <a href="#" class="action-icon view-icon" title="View">
+                            <img src="static/images/view.svg" alt="View">
+                        </a>
+                        <a href="#" class="action-icon download-icon" title="Download">
+                            <img src="static/images/download.svg" alt="Download">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Three.js library (global) for dither.js -->
+    <script src="https://unpkg.com/three@0.152.0/build/three.min.js"></script>
+    
+    <!-- Dither Effect Script -->
+    <script src="static/dither.js"></script>
+    
+    <!-- Filter functionality -->
+    <script>
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryCards = document.querySelectorAll('.gallery-card');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                const filter = button.getAttribute('data-filter');
+                
+                // Show/hide cards based on filter
+                galleryCards.forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        const category = card.getAttribute('data-category');
+                        if (category === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    
 </body>
 </html>
