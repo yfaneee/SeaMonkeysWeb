@@ -327,12 +327,6 @@ nav ul {
   transform: scale(1.2);
 }
 
-.end {
-  margin-bottom: 150px;
-}
-
-
-
 
 /* Responsiveness to displays narrower than 800px */
 
@@ -1272,4 +1266,24 @@ nav ul {
   .gsplat-controls-hint span {
     font-size: 0.75rem;
   }
+}
+
+/* ----- FOOTER ----- */
+.site-footer {
+  background-color: #0a0a0a;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 120px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.site-footer p {
+  font-family: 'Harmattan-Medium', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
 }

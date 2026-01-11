@@ -57,7 +57,7 @@
                         <a href="#" class="action-icon view-icon" title="View">
                             <img src="static/images/view.svg" alt="View">
                         </a>
-                        <a href="#" class="action-icon download-icon" title="Download">
+                        <a href="static/gsplat/point_cloud.ply" class="action-icon download-icon" title="Download" download>
                             <img src="static/images/download.svg" alt="Download">
                         </a>
                     </div>
@@ -196,7 +196,7 @@
                 title: 'ACHTEROOM CORNER GAUSSIAN SPLAT',
                 hasGSplat: true,
                 gSplatUrl: '/static/gsplat/point_cloud.ply',
-                downloadLink: '#',
+                downloadLink: 'static/gsplat/point_cloud.ply',
                 realLifePhotos: [
                     'static/scansimages/cornerGsplat1.webp',
                     'static/scansimages/cornerGsplat2.webp',
@@ -341,7 +341,7 @@
                 
                 <div class="scan-main-section">
                     ${mainMediaHTML}
-                    <a href="${scan.downloadLink}" class="scan-download-btn">DOWNLOAD MODEL HERE ↓</a>
+                    <a href="${scan.downloadLink}" class="scan-download-btn" download>DOWNLOAD MODEL HERE ↓</a>
                 </div>
                 
                 <h2 class="scan-section-title">REAL LIFE PICTURES</h2>
@@ -599,6 +599,10 @@
     <a href="#top">
         <img class="scrolltop" src="static/images/scrollup.png" alt="Scroll up button">
     </a>
+    
+    <footer class="site-footer">
+        <p>© 2026 SeaMonkeys. All rights reserved.</p>
+    </footer>
     
 </body>
 </html>
