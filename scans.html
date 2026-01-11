@@ -35,7 +35,7 @@
         </nav>
     </header>
 
-    <main class="scans-content">
+    <main class="scans-content" id="scans-gallery-view">
         <h1 class="scans-title">SCANS</h1>
         
         <div class="filter-buttons">
@@ -46,7 +46,7 @@
         
         <div class="gallery-grid">
             <!-- Card 1 -->
-            <div class="gallery-card" data-category="gaussian">
+            <div class="gallery-card scan-card" data-category="gaussian" data-scan="achteroom-corner-gsplat">
                 <div class="card-image">
                     <img src="static/scans/CornerGsplat.png" alt="Achteroom Corner">
                 </div>
@@ -65,7 +65,7 @@
             </div>
             
             <!-- Card 2 -->
-            <div class="gallery-card" data-category="gaussian">
+            <div class="gallery-card scan-card" data-category="gaussian" data-scan="church-gsplat">
                 <div class="card-image">
                     <img src="static/scans/ChurchGsplat.png" alt="Church gsplat">
                 </div>
@@ -84,7 +84,7 @@
             </div>
             
             <!-- Card 3 -->
-            <div class="gallery-card" data-category="mesh">
+            <div class="gallery-card scan-card" data-category="mesh" data-scan="achteroom-corner-mesh">
                 <div class="card-image">
                     <img src="static/scans/CornerV2b.png" alt="Achteroom Corner mesh">
                 </div>
@@ -103,7 +103,7 @@
             </div>
 
              <!-- Card 4 -->
-             <div class="gallery-card" data-category="mesh">
+             <div class="gallery-card scan-card" data-category="mesh" data-scan="church-mesh">
                 <div class="card-image">
                     <img src="static/scans/ChurchRenderC.png" alt="church mesh">
                 </div>
@@ -122,7 +122,7 @@
             </div>
 
              <!-- Card 5 -->
-             <div class="gallery-card" data-category="mesh">
+             <div class="gallery-card scan-card" data-category="mesh" data-scan="effenaar-mesh">
                 <div class="card-image">
                     <img src="static/scans/EffenaarA.png" alt="effenaar mesh">
                 </div>
@@ -141,18 +141,381 @@
             </div>
         </div>
     </main>
+
+    <!-- Scan Detail View -->
+    <main class="scans-content scan-detail-view" id="scan-detail-view" style="display: none;">
+        <button class="back-button" id="back-button-scan">
+            <img src="static/images/return.svg" alt="Back">
+        </button>
+        
+        <div class="scan-detail-content" id="scan-detail-content">
+            <!-- Content will be dynamically loaded here -->
+        </div>
+    </main>
     
     <!-- Three.js library (global) for dither.js -->
     <script src="https://unpkg.com/three@0.152.0/build/three.min.js"></script>
     
+    <!-- Import map for Three.js module -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.152.0/build/three.module.js"
+        }
+    }
+    </script>
+    
     <!-- Dither Effect Script -->
     <script src="static/dither.js"></script>
     
-    <!-- Filter functionality -->
-    <script>
+    <!-- Scan Gallery and Detail View Script -->
+    <script type="module">
+        // Import GaussianSplats3D library - using version 0.4.7 (same as isoportfolio)
+        import * as GaussianSplats3D from 'https://unpkg.com/@mkkellogg/gaussian-splats-3d@0.4.7/build/gaussian-splats-3d.module.js';
+        
+        const scansGalleryView = document.getElementById('scans-gallery-view');
+        const scanDetailView = document.getElementById('scan-detail-view');
+        const scanDetailContent = document.getElementById('scan-detail-content');
+        const backButtonScan = document.getElementById('back-button-scan');
         const filterButtons = document.querySelectorAll('.filter-btn');
         const galleryCards = document.querySelectorAll('.gallery-card');
+        const scanCards = document.querySelectorAll('.scan-card');
         
+        console.log('scanCards found:', scanCards.length);
+        
+        // Scan data for each scan
+        const scanData = {
+            'achteroom-corner-gsplat': {
+                title: 'ACHTEROOM CORNER GAUSSIAN SPLAT',
+                hasGSplat: true,
+                gSplatUrl: '/static/gsplat/point_cloud.ply',
+                downloadLink: '#',
+                realLifePhotos: [
+                    'static/scansimages/cornerGsplat1.jpg',
+                    'static/scansimages/cornerGsplat2.jpg',
+                    'static/scansimages/cornerGsplat3.jpg',
+                    'static/scansimages/cornerGsplat4.jpg'
+                ],
+                aboutText: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl tempus erat blandit nunc. Duis aliquam aliquam felis viverra est.',
+                scanPhotos: [
+                    'static/scansimages/cornerGsplat5.png',
+                    'static/scansimages/cornerGsplat6.png',
+                    'static/scansimages/cornerGsplat7.png',
+                    'static/scansimages/cornerGsplat8.png'
+                ]
+            },
+            'church-gsplat': {
+                title: 'EINDHOVEN CENTER CHURCH GAUSSIAN SPLAT',
+                mainImage: 'static/scans/ChurchGsplat.png',
+                hasGSplat: false,
+                downloadLink: '#',
+                realLifePhotos: [
+                    'static/scans/placeholder-real-1.jpg',
+                    'static/scans/placeholder-real-2.jpg',
+                    'static/scans/placeholder-real-3.jpg',
+                    'static/scans/placeholder-real-4.jpg'
+                ],
+                aboutText: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl tempus erat blandit nunc. Duis aliquam aliquam felis viverra est.',
+                scanPhotos: [
+                    'static/scans/placeholder-scan-1.jpg',
+                    'static/scans/placeholder-scan-2.jpg',
+                    'static/scans/placeholder-scan-3.jpg',
+                    'static/scans/placeholder-scan-4.jpg'
+                ]
+            },
+            'achteroom-corner-mesh': {
+                title: 'ACHTEROOM CORNER MESH',
+                mainImage: 'static/scans/CornerV2b.png',
+                hasGSplat: false,
+                downloadLink: '#',
+                realLifePhotos: [
+                    'static/scans/placeholder-real-1.jpg',
+                    'static/scans/placeholder-real-2.jpg',
+                    'static/scans/placeholder-real-3.jpg',
+                    'static/scans/placeholder-real-4.jpg'
+                ],
+                aboutText: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl tempus erat blandit nunc. Duis aliquam aliquam felis viverra est.',
+                scanPhotos: [
+                    'static/scans/placeholder-scan-1.jpg',
+                    'static/scans/placeholder-scan-2.jpg',
+                    'static/scans/placeholder-scan-3.jpg',
+                    'static/scans/placeholder-scan-4.jpg'
+                ]
+            },
+            'church-mesh': {
+                title: 'EINDHOVEN CENTER CHURCH MESH',
+                mainImage: 'static/scans/ChurchRenderC.png',
+                hasGSplat: false,
+                downloadLink: '#',
+                realLifePhotos: [
+                    'static/scans/placeholder-real-1.jpg',
+                    'static/scans/placeholder-real-2.jpg',
+                    'static/scans/placeholder-real-3.jpg',
+                    'static/scans/placeholder-real-4.jpg'
+                ],
+                aboutText: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl tempus erat blandit nunc. Duis aliquam aliquam felis viverra est.',
+                scanPhotos: [
+                    'static/scans/placeholder-scan-1.jpg',
+                    'static/scans/placeholder-scan-2.jpg',
+                    'static/scans/placeholder-scan-3.jpg',
+                    'static/scans/placeholder-scan-4.jpg'
+                ]
+            },
+            'effenaar-mesh': {
+                title: 'EFFENAAR MESH',
+                mainImage: 'static/scans/EffenaarA.png',
+                hasGSplat: false,
+                downloadLink: '#',
+                realLifePhotos: [
+                    'static/scans/placeholder-real-1.jpg',
+                    'static/scans/placeholder-real-2.jpg',
+                    'static/scans/placeholder-real-3.jpg',
+                    'static/scans/placeholder-real-4.jpg'
+                ],
+                aboutText: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl tempus erat blandit nunc. Duis aliquam aliquam felis viverra est.',
+                scanPhotos: [
+                    'static/scans/placeholder-scan-1.jpg',
+                    'static/scans/placeholder-scan-2.jpg',
+                    'static/scans/placeholder-scan-3.jpg',
+                    'static/scans/placeholder-scan-4.jpg'
+                ]
+            }
+        };
+        
+        // Function to show scan detail
+        function showScanDetail(scanId) {
+            const scan = scanData[scanId];
+            if (!scan) return;
+            
+            // Determine if we should show GSplat viewer or static image
+            const mainMediaHTML = scan.hasGSplat ? `
+                <div class="gsplat-viewer-wrapper" id="gsplat-viewer">
+                    <div class="gsplat-load-prompt" id="gsplat-load-prompt">
+                        <div class="gsplat-load-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                <polyline points="7.5 4.21 12 6.81 16.5 4.21" />
+                                <polyline points="7.5 19.79 7.5 14.6 3 12" />
+                                <polyline points="21 12 16.5 14.6 16.5 19.79" /> 
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                                <line x1="12" y1="22.08" x2="12" y2="12" />
+                            </svg>
+                        </div>
+                        <h3 class="gsplat-load-title">3D Gaussian Splat</h3>
+                        <p class="gsplat-load-description">Achteroom Corner - Eindhoven (~50MB)</p>
+                        <button class="gsplat-load-button" onclick="loadGSplat('${scan.gSplatUrl}')">
+                            <span class="gsplat-load-button-icon">▶</span>
+                            Load 3D Model
+                        </button>
+                    </div>
+                    <div class="gsplat-loading" id="gsplat-loading" style="display: none;">
+                        <div class="gsplat-loading-spinner"></div>
+                        <p class="gsplat-loading-text">Loading 3D model...</p>
+                        <div class="gsplat-progress-bar">
+                            <div class="gsplat-progress-fill" id="gsplat-progress-fill" style="width: 0%"></div>
+                        </div>
+                        <p class="gsplat-progress-text" id="gsplat-progress-text">0%</p>
+                    </div>
+                    <div class="gsplat-error" id="gsplat-error" style="display: none;">
+                        <p id="gsplat-error-message">Failed to load 3D model. Please try again.</p>
+                        <button class="gsplat-retry-button" onclick="loadGSplat('${scan.gSplatUrl}')">Try Again</button>
+                    </div>
+                    <div class="gsplat-canvas-container" id="gsplat-canvas"></div>
+                    <div class="gsplat-controls-hint" id="gsplat-controls" style="display: none;">
+                        <span>Drag to rotate • Scroll to zoom • Right-click to pan</span>
+                        <button class="gsplat-reset-button" onclick="resetGSplatCamera()">Reset View</button>
+                    </div>
+                </div>
+            ` : `<img src="${scan.mainImage}" alt="${scan.title}" class="scan-main-image">`;
+            
+            // Build the HTML for the scan detail
+            scanDetailContent.innerHTML = `
+                <h1 class="scan-detail-title">${scan.title}</h1>
+                
+                <div class="scan-main-section">
+                    ${mainMediaHTML}
+                    <a href="${scan.downloadLink}" class="scan-download-btn">DOWNLOAD MODEL HERE ↓</a>
+                </div>
+                
+                <h2 class="scan-section-title">REAL LIFE PICTURES</h2>
+                <div class="scan-photo-grid">
+                    ${scan.realLifePhotos.map(photo => `<img src="${photo}" alt="Real life photo" class="scan-photo">`).join('')}
+                </div>
+                
+                <h2 class="scan-section-title">ABOUT THE ASSET</h2>
+                <p class="scan-about-text">${scan.aboutText}</p>
+                
+                <div class="scan-photo-grid">
+                    ${scan.scanPhotos.map(photo => `<img src="${photo}" alt="Scan photo" class="scan-photo">`).join('')}
+                </div>
+            `;
+            
+            // Switch views
+            scansGalleryView.style.display = 'none';
+            scanDetailView.style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+        
+        // GSplat Viewer State
+        let currentGSplatViewer = null;
+        const DEFAULT_CAMERA_POSITION = [-3, -2, -3];
+        const DEFAULT_CAMERA_LOOK_AT = [3, 1, 3];
+        
+        // Function to load GSplat
+        window.loadGSplat = async function(plyUrl) {
+            console.log('Attempting to load GSplat from:', plyUrl);
+            
+            if (!GaussianSplats3D) {
+                console.error('GaussianSplats3D library not loaded');
+                document.getElementById('gsplat-error').style.display = 'flex';
+                return;
+            }
+            
+            // Hide prompt, show loading
+            document.getElementById('gsplat-load-prompt').style.display = 'none';
+            document.getElementById('gsplat-loading').style.display = 'flex';
+            document.getElementById('gsplat-error').style.display = 'none';
+            
+            try {
+                const container = document.getElementById('gsplat-canvas');
+                console.log('Container:', container);
+                
+                // Create the viewer
+                const viewer = new GaussianSplats3D.Viewer({
+                    cameraUp: [0, -1, 0],
+                    initialCameraPosition: DEFAULT_CAMERA_POSITION,
+                    initialCameraLookAt: DEFAULT_CAMERA_LOOK_AT,
+                    rootElement: container,
+                    sharedMemoryForWorkers: false,
+                    dynamicScene: false,
+                    selfDrivenMode: true,
+                    useBuiltInControls: true,
+                    enableSIMDInSort: false,
+                    controlOptions: {
+                        enableDamping: true,
+                        dampingFactor: 0.1,
+                        enableZoom: true,
+                        enableRotate: true,
+                        enablePan: true,
+                        enableKeyboardControls: false,
+                    }
+                });
+                
+                currentGSplatViewer = viewer;
+                
+                console.log('Viewer created, loading splat scene...');
+                
+                // Add the splat scene with progress callback
+                await viewer.addSplatScene(plyUrl, {
+                    splatAlphaRemovalThreshold: 5,
+                    showLoadingUI: false,
+                    progressiveLoad: true,
+                    onProgress: (percent) => {
+                        const progress = Math.round(percent);
+                        console.log('Loading progress:', progress + '%');
+                        document.getElementById('gsplat-progress-fill').style.width = progress + '%';
+                        document.getElementById('gsplat-progress-text').textContent = progress + '%';
+                    }
+                });
+                
+                console.log('Splat scene loaded successfully');
+                
+                // Start the viewer
+                viewer.start();
+                
+                // Hide loading, show canvas and controls
+                document.getElementById('gsplat-loading').style.display = 'none';
+                document.getElementById('gsplat-canvas').classList.add('visible');
+                document.getElementById('gsplat-controls').style.display = 'flex';
+                
+            } catch (err) {
+                console.error('Failed to load GSplat model:', err);
+                console.error('Error type:', err.constructor.name);
+                console.error('Error details:', err.message);
+                if (err.stack) console.error('Stack trace:', err.stack);
+                
+                document.getElementById('gsplat-loading').style.display = 'none';
+                document.getElementById('gsplat-error').style.display = 'flex';
+                
+                // More helpful error message
+                let errorMsg = 'Failed to load 3D model.';
+                if (err.message.includes('Could not load file')) {
+                    errorMsg = 'The .ply file format may not be compatible. Try exporting with different settings.';
+                }
+                document.getElementById('gsplat-error-message').textContent = errorMsg;
+            }
+        }
+        
+        // Function to reset GSplat camera
+        window.resetGSplatCamera = function() {
+            if (currentGSplatViewer) {
+                const viewer = currentGSplatViewer;
+                
+                if (viewer.camera) {
+                    viewer.camera.position.set(...DEFAULT_CAMERA_POSITION);
+                    viewer.camera.lookAt(...DEFAULT_CAMERA_LOOK_AT);
+                    viewer.camera.updateProjectionMatrix();
+                }
+                
+                if (viewer.controls) {
+                    viewer.controls.target.set(...DEFAULT_CAMERA_LOOK_AT);
+                    viewer.controls.update();
+                }
+            }
+        }
+        
+        // Cleanup GSplat viewer when leaving detail view
+        function cleanupGSplat() {
+            if (currentGSplatViewer) {
+                try {
+                    currentGSplatViewer.stop?.();
+                    if (currentGSplatViewer.renderer) {
+                        currentGSplatViewer.renderer.dispose();
+                    }
+                    if (currentGSplatViewer.splatMesh) {
+                        currentGSplatViewer.splatMesh.dispose?.();
+                    }
+                } catch (e) {
+                    console.error('Error cleaning up GSplat:', e);
+                }
+                currentGSplatViewer = null;
+            }
+        }
+        
+        // Handle scan card clicks - both whole card and view icon
+        scanCards.forEach(card => {
+            const scanId = card.getAttribute('data-scan');
+            const viewIcon = card.querySelector('.view-icon');
+            
+            // Make whole card clickable
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', (e) => {
+                // Don't trigger if clicking download icon
+                if (!e.target.closest('.download-icon')) {
+                    e.preventDefault();
+                    showScanDetail(scanId);
+                }
+            });
+            
+            // View icon also works
+            if (viewIcon) {
+                viewIcon.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showScanDetail(scanId);
+                });
+            }
+        });
+        
+        // Handle back button click
+        backButtonScan.addEventListener('click', () => {
+            cleanupGSplat();
+            scanDetailView.style.display = 'none';
+            scansGalleryView.style.display = 'block';
+            window.scrollTo(0, 0);
+        });
+        
+        // Filter functionality
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
                 // Remove active class from all buttons
@@ -178,6 +541,10 @@
             });
         });
     </script>
+    
+    <a href="#top">
+        <img class="scrolltop" src="static/images/scrollup.png" alt="Scroll up button">
+    </a>
     
 </body>
 </html>
