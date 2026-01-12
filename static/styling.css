@@ -47,11 +47,15 @@ a {
 /* ----- START NAVBAR ----- */
 header {
   /* background: var(--fill1); */
-  background: black;
-  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(80px);
+  width: 90%;
   position: fixed;
   z-index: 2000;
-  top: 0;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 20px;
 }
 
 nav {
