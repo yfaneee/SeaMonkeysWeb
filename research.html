@@ -752,6 +752,68 @@ python train.py -s ~/new_scene -m ~/new_scene/3dgs_model</div>
                     <p class="doc-text">To achieve optimal results in virtual production pipelines, scanned environments should contain sufficient geometric and visual complexity, avoid problematic surface patterns, and utilize reconstruction methods optimized for real-time performance. By following these guidelines, 3D scans can be more reliably integrated into Unreal Engine-based virtual production setups, ensuring both visual quality and technical efficiency.</p>
                 `
             },
+            'obj-fbx-gltf': {
+                title: 'OBJ VS FBX VS GLTF',
+                content: `
+                    <h1 class="doc-heading">Overview of Formats</h1>
+                        <h2 class="doc-subtitle">OBJ</h2>
+                        <p class="doc-text">The OBJ format is a simple, text-based format primarily designed to store mesh geometry, including vertices, UVs, normals, and faces. It often comes with a companion .mtl file to provide basic material information. OBJ is widely supported across 3D modeling and scanning tools, making it a reliable option for simple geometry exchange. </p>
+                        <h2 class="doc-subtitle">FBX</h2>
+                        <p class="doc-text">FBX is a proprietary format developed by Autodesk, capable of storing complex 3D scenes, including meshes, materials, animations, rigging, and scene hierarchies. It is widely adopted in professional 3D pipelines and game engines, including Unreal Engine, and supports both ASCII and binary storage. </p>
+                        <h2 class="doc-subtitle">glTF/GLB</h2>
+                        <p class="doc-text">glTF is an open standard designed for efficient transmission of 3D assets. It uses JSON and external binary buffers, while GLB is its binary variant that bundles geometry, textures, materials, and optional animations into a single file. glTF/GLB supports physically based rendering (PBR) materials and modern real-time engine workflows. </p>
+
+                    <h1 class="doc-heading">Strengths and Weaknesses</h1>
+                        <h2 class="doc-subtitle">OBJ</h2>
+                        <h3 class="doc-lead">Strengths</h3>
+                        <p class="doc-text">&nbsp;•Universally supported by most 3D software.</p>
+                        <p class="doc-text">&nbsp;• Simple text format allows manual inspection and debugging. </p>
+                        <p class="doc-text">&nbsp;• Suitable for static geometry exchange or archival purposes. </p>
+                        <h3 class="doc-lead">Weaknesses</h3>
+                        <p class="doc-text">&nbsp;• Does not support animations, scene hierarchy, or advanced materials. </p>
+                        <p class="doc-text">&nbsp;• Material representation is limited and not compatible with modern PBR workflows. </p>
+                        <p class="doc-text">&nbsp;• File sizes can be larger due to text-based redundancy and inefficiency for real-time rendering. </p>
+                        <h3 class="doc-lead">Ideal usage</h3>
+                        <p class="doc-text">Suitability for Virtual Production: Limited. OBJ is appropriate only for static scans without complex materials or shaders. For photorealistic virtual production, OBJ is generally insufficient. </p>
+
+                        <h2 class="doc-subtitle">FBX</h2>
+                        <h3 class="doc-lead">Strengths</h3>
+                        <p class="doc-text">&nbsp;• Supports full scene complexity including hierarchy, animations, rigging, and LODs. </p>
+                        <p class="doc-text">&nbsp;• Compatible with Unreal Engine and most professional pipelines. </p>
+                        <p class="doc-text">&nbsp;• Preserves scene structure and sub-meshes effectively. </p>
+                        <h3 class="doc-lead">Weaknesses</h3>
+                        <p class="doc-text">&nbsp;• Material models are often legacy (spec-gloss or Blinn-Phong), requiring rework for PBR-based photorealism. </p>
+                        <p class="doc-text">&nbsp;• Proprietary format may depend on Autodesk tools for optimal fidelity. </p>
+                        <p class="doc-text">&nbsp;• Additional material and lighting adjustments may be necessary after import to achieve realistic rendering. </p>
+                        <h3 class="doc-lead">Ideal usage</h3>
+                        <p class="doc-text">Suitability for Virtual Production: Strong. FBX is suitable for complex 3D-scanned scenes, particularly if hierarchy or animations are needed. Post-import material adjustments are typically required for photorealistic results. </p>
+                        
+                        <h2 class="doc-subtitle">glTF/GLB</h2>
+                        <h3 class="doc-lead">Strengths</h3>
+                        <p class="doc-text">&nbsp;• Open, modern format optimized for real-time workflows. </p>
+                        <p class="doc-text">&nbsp;• Supports PBR materials, textures, scene hierarchy, and animations.</p>
+                        <p class="doc-text">&nbsp;• Compact and efficient binary representation reduces file size and load times. </p>
+                        <p class="doc-text">&nbsp;• Widely supported and increasingly adopted in real-time engines and AR/VR pipelines. </p>
+                        <h3 class="doc-lead">Weaknesses</h3>
+                        <p class="doc-text">&nbsp;• Some advanced shader networks or nonstandard extensions may not be fully supported. </p>
+                        <p class="doc-text">&nbsp;• Less convenient than FBX for repeated editing, retopology, or shader modifications. </p>
+                        <p class="doc-text">&nbsp;• Compatibility may vary across different tools due to evolving standards. </p>
+                        <h3 class="doc-lead">Ideal usage</h3>
+                        <p class="doc-text">Suitability for Virtual Production: Excellent. glTF/GLB is ideal for photorealistic, static or minimally animated 3D-scanned scenes due to its PBR support, efficient performance, and open standard design. </p>
+
+                    <h1 class="doc-heading">Recommendations</h1>
+                        <p class="doc-lead">For photorealistic 3D-scanned environments in Unreal Engine: </p>
+                        <p class="doc-text">&nbsp;&nbsp;1• glTF / GLB: Preferred for static or near-static scenes. Provides PBR material fidelity, compact file sizes, and real-time engine efficiency. </p>
+                        <p class="doc-text">&nbsp;&nbsp;2• FBX: Recommended when complex scene hierarchies, animations, or LODs are required. Requires post-import material adjustments to achieve photorealism. </p>
+                        <p class="doc-text">&nbsp;&nbsp;3• OBJ: Use only as a fallback for simple geometry exchange or archival purposes. Not suitable for high-fidelity real-time rendering. </p>
+
+                    <h1 class="doc-heading">Additional Considerations</h1>
+                        <p class="doc-text">&nbsp;• Material fidelity and shading: For photorealism, PBR materials and physically based lighting are critical. OBJ does not support these effectively; FBX and glTF/GLB do. </p>
+                        <p class="doc-text">&nbsp;• Performance: Large 3D-scanned scenes benefit from glTF/GLB’s compact binary format for faster load times and real-time rendering. </p>
+                        <p class="doc-text">&nbsp;• Pipeline compatibility: Choose a format that aligns with your scanning, cleanup, texturing, and Unreal import workflow. glTF offers open flexibility, FBX offers pipeline ubiquity, and OBJ maximizes portability at the cost of material fidelity. </p>
+                        <p class="doc-text">&nbsp;• Editing versus distribution: FBX is more suitable for repeated edits. glTF/GLB is more efficient for final scene export. </p>
+                `
+            },
             // Add more documentation entries as needed
         };
         

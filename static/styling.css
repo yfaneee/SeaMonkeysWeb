@@ -456,6 +456,16 @@ nav ul {
   text-shadow: 3px 5px 12px rgba(0, 0, 0, 0.7);
 }
 
+.doc-heading {
+  font-family: 'Harmattan-Medium', sans-serif;
+  font-size: clamp(1.75rem, 3vw, 3rem);
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: 30px 0 15px 0;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+}
+
 .doc-subtitle {
   font-family: 'Harmattan-Medium', sans-serif;
   font-size: clamp(1.5rem, 2.5vw, 2rem);
@@ -464,6 +474,15 @@ nav ul {
   margin: 30px 0 15px 0;
   font-weight: bold;
   letter-spacing: 0.03em;
+}
+
+.doc-lead {
+  font-family: 'Harmattan-Medium', sans-serif;
+  font-size: clamp(1.25rem, 1.5vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  margin: 0 0 15px 0;
+  font-weight: bold;
 }
 
 .doc-text {
