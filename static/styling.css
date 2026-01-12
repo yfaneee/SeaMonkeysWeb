@@ -68,7 +68,7 @@ nav {
 .navtext {
   text-decoration: none;
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 100;
   /* color: var(--text1); */
   color: white;
   font-family: 'Milker', sans-serif;
