@@ -732,7 +732,20 @@ python train.py -s ~/new_scene -m ~/new_scene/3dgs_model</div>
             'advisory-report': {
                 title: 'ADVISORY REPORT',
                 content: `
+                    <h2 class="doc-subtitle">Introduction</h2>
+                    <p class="doc-text">When preparing environments for 3D scanning intended for virtual production workflows, it is important to consider how scanning technologies interpret spatial data. The quality and usability of the resulting digital environment depend heavily on the physical characteristics of the scanned space and the reconstruction method used.</p>
                     
+                    <h2 class="doc-subtitle">Spatial Complexity and Geometry</h2>
+                    <p class="doc-text">Empty or minimally detailed rooms should be avoided when scanning for virtual production. Most 3D scanning and photogrammetry software relies on identifiable depth points and visual features to reconstruct geometry accurately. Large, flat surfaces without variation (such as empty rooms with smooth floors, walls, and ceilings) do not provide sufficient depth information for the software to process. As a result, the reconstructed environment may contain inaccuracies, holes, or unstable geometry. Introducing objects, furniture, or architectural details improves depth detection and leads to more reliable spatial reconstruction.</p>
+
+                    <h2 class="doc-subtitle">Surface Patterns and Materials</h2>
+                    <p class="doc-text">Walls or surfaces with strong repeating patterns, reflective materials, or highly uniform textures should also be avoided. Patterned walls can confuse feature-matching algorithms used in scanning software, causing misalignment or warped geometry. Similarly, reflective or glossy surfaces can introduce noise or incorrect depth data. For best results, surfaces should have varied but non-repetitive visual detail with matte finishes, allowing the software to clearly distinguish spatial features.</p>
+
+                    <h2 class="doc-subtitle">Reconstruction Method for Virtual Production</h2>
+                    <p class="doc-text">For live virtual production use (particularly in Unreal Engine) Gaussian splatting is generally preferred over traditional mesh-based reconstructions or NeRFs. Gaussian splats offer a more efficient balance between visual fidelity and real-time performance. Unlike dense meshes, Gaussian splats do not require heavy geometry processing, and compared to NeRFs, they are significantly more practical for live rendering scenarios. This makes them especially suitable for real-time camera movement, lighting interaction, and on-set visualization where performance stability is critical.</p>
+
+                    <h2 class="doc-subtitle">Conclusion</h2>
+                    <p class="doc-text">To achieve optimal results in virtual production pipelines, scanned environments should contain sufficient geometric and visual complexity, avoid problematic surface patterns, and utilize reconstruction methods optimized for real-time performance. By following these guidelines, 3D scans can be more reliably integrated into Unreal Engine-based virtual production setups, ensuring both visual quality and technical efficiency.</p>
                 `
             },
             // Add more documentation entries as needed
