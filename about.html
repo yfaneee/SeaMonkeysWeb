@@ -35,23 +35,116 @@
         </nav>
     </header>
 
-    <h1>About</h1>
+    <!-- Studio Content -->
+    <main class="studio-content">
+        <!-- Logo Section -->
+        <div class="studio-logo-section">
+            <img src="static/images/logo.png" alt="SeaMonkeys Logo" class="studio-logo">
+        </div>
+
+        <!-- Mission Statement Section -->
+        <section class="studio-section">
+            <h2 class="studio-section-title">Mission Statement</h2>
+            <p class="studio-text">SeaMonkeys is a design studio born from experimentation and driven by imagination. Our mission is to craft original, impactful design that connects people with brands in fresh and memorable ways.</p>
+        </section>
+
+        <!-- Brand Guide Section -->
+        <section class="studio-section">
+            <h2 class="studio-section-title">Brand Guide</h2>
+            <a href="https://www.figma.com/design/YkB8TVvWoICxUf1IX9NxSQ/SeaMonkeysBrandGuide?node-id=25-63&t=nmeZeYyk4ljRjIXC-0" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="studio-brand-guide-link">
+                <img src="static/images/brandguide.png" alt="SeaMonkeys Brand Guide" class="studio-brand-guide-image">
+                <div class="studio-brand-guide-overlay">
+                    <span class="studio-brand-guide-text">View Brand Guide →</span>
+                </div>
+            </a>
+        </section>
+
+        <!-- Core Values Section -->
+        <section class="studio-section">
+            <h2 class="studio-section-title">Core Values</h2>
+            <div class="studio-values-container">
+                <div class="studio-value-card">
+                    <h3 class="studio-value-title">Fun</h3>
+                </div>
+                <div class="studio-value-card">
+                    <h3 class="studio-value-title">Bold</h3>
+                </div>
+                <div class="studio-value-card">
+                    <h3 class="studio-value-title">Unconventional</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Artwork Section -->
+        <section class="studio-section">
+            <h2 class="studio-section-title">Artwork</h2>
+            <img src="static/images/SMartwork.png" alt="SeaMonkeys Artwork" class="studio-artwork-image" id="studio-artwork">
+        </section>
+    </main>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal">
+        <span class="image-modal-close" id="modalClose">&times;</span>
+        <img class="image-modal-content" id="modalImage">
+        <div class="image-modal-caption" id="modalCaption"></div>
+    </div>
+
+    <a href="#top">
+        <img class="scrolltop" src="static/images/scrollup.png" alt="Scroll up button">
+    </a>
     
     <!-- Three.js library (global) for dither.js -->
     <script src="https://unpkg.com/three@0.152.0/build/three.min.js"></script>
     
-    <!-- Import map for Three.js module -->
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.152.0/build/three.module.js"
-        }
-    }
-    </script>
-    
     <!-- Dither Effect Script -->
     <script src="static/dither.js"></script>
 
+    <!-- Image Modal Script -->
+    <script>
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('modalCaption');
+        const closeModal = document.getElementById('modalClose');
+        const artworkImage = document.getElementById('studio-artwork');
+        
+        // Open modal when artwork image is clicked
+        artworkImage.addEventListener('click', function() {
+            modal.style.display = 'block';
+            modalImg.src = this.src;
+            modalCaption.textContent = this.alt;
+            // Prevent body scroll when modal is open
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Close modal when clicking the X
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close modal when clicking outside the image
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+
+    <footer class="site-footer">
+        <p>© 2026 SeaMonkeys. All rights reserved.</p>
+    </footer>
     
 </body>
 </html>
